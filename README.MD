@@ -1,37 +1,34 @@
-Adding a New Model to PX4: X500 with Depth Camera and 2D LiDAR
-This guide provides step-by-step instructions to add a new model (x500_lidar_depth) to PX4 for use with Gazebo Harmonic (Gz). The model includes an X500 drone equipped with a depth camera and a 2D LiDAR.
+# Adding a New Model to PX4: X500 with Depth Camera and 2D LiDAR
 
-Prerequisites
-PX4-Autopilot installed and set up.
+This guide provides step-by-step instructions to add a new model (`x500_lidar_depth`) to PX4 for use with Gazebo Harmonic (Gz). The model includes an X500 drone equipped with a depth camera and a 2D LiDAR.
 
-Gazebo Harmonic (Gz) installed and configured.
+## Prerequisites
+- PX4-Autopilot installed and set up.
+- Gazebo Harmonic (Gz) installed and configured.
+- Basic knowledge of ROS 2 and PX4.
 
-Basic knowledge of ROS 2 and PX4.
+## Steps to Add the New Model
 
-Steps to Add the New Model
-1. Create the Model SDF File
-Navigate to the Models Directory:
+### 1. Create the Model SDF File
 
-bash
-Copy
+#### Navigate to the Models Directory:
+```bash
 cd ~/PX4-Autopilot/Tools/simulation/gz/models
-Create a New Directory for the Model:
+```
 
-bash
-Copy
+#### Create a New Directory for the Model:
+```bash
 mkdir x500_lidar_depth
 cd x500_lidar_depth
-Create the SDF File (model.sdf):
+```
 
-Create a file named model.sdf:
-
-bash
-Copy
+#### Create the SDF File (`model.sdf`):
+```bash
 nano model.sdf
-Add the following content:
+```
 
-xml
-Copy
+#### Add the following content:
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version='1.9'>
   <model name='x500_lidar_depth'>
@@ -63,18 +60,15 @@ Copy
     </joint>
   </model>
 </sdf>
-Run HTML
-Create the model.config File:
+```
 
-Create a file named model.config:
-
-bash
-Copy
+#### Create the `model.config` File:
+```bash
 nano model.config
-Add the following content:
+```
 
-xml
-Copy
+#### Add the following content:
+```xml
 <?xml version="1.0"?>
 <model>
   <name>X500 with Depth Camera and 2D LiDAR</name>
@@ -90,105 +84,90 @@ Copy
     X500 drone with OakD-Lite depth camera and 2D LiDAR for PX4 simulation.
   </description>
 </model>
-Run HTML
-2. Define the Airframe Configuration File
-Navigate to the Airframes Directory:
+```
 
-bash
-Copy
+### 2. Define the Airframe Configuration File
+
+#### Navigate to the Airframes Directory:
+```bash
 cd ~/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes
-Create a New Airframe File:
+```
 
-Copy an existing airframe file (e.g., 4010_x500) and modify it:
-
-bash
-Copy
+#### Create a New Airframe File:
+```bash
 cp 4010_x500 4021_gz_x500_lidar_depth
-Edit the Airframe File:
+```
 
-Open the file for editing:
-
-bash
-Copy
+#### Edit the Airframe File:
+```bash
 nano 4021_gz_x500_lidar_depth
-Update the file with the following content:
+```
 
-bash
-Copy
+#### Update the file with the following content:
+```bash
 #!/bin/sh
 #
 # @name Gazebo x500 with Depth Camera and 2D LiDAR
 #
 # @type Quadrotor
 #
-
 PX4_SIM_MODEL=${PX4_SIM_MODEL:=x500_lidar_depth}
 
 . ${R}etc/init.d-posix/airframes/4001_gz_x500
-3. Add the Airframe to CMake
-Edit the CMakeLists.txt File:
+```
 
-Open the CMakeLists.txt file in the airframes directory:
+### 3. Add the Airframe to CMake
 
-bash
-Copy
+#### Edit the `CMakeLists.txt` File:
+```bash
 nano CMakeLists.txt
-Add the following line to include the new airframe:
+```
 
-cmake
-Copy
+#### Add the following line to include the new airframe:
+```cmake
 px4_add_airframe_file(
   PATH "4021_gz_x500_lidar_depth"
   CLASS "simulation"
   TYPE "quadrotor"
   MAINTAINER "Your Name <your.email@example.com>"
 )
-Rebuild PX4:
+```
 
-Rebuild PX4 to include the new airframe:
-
-bash
-Copy
+#### Rebuild PX4:
+```bash
 cd ~/PX4-Autopilot
 make px4_sitl gz_x500_lidar_depth
-4. Test the New Airframe
-Start the Simulation:
+```
 
-Use the new airframe ID to start the simulation:
+### 4. Test the New Airframe
 
-bash
-Copy
+#### Start the Simulation:
+```bash
 PX4_SYS_AUTOSTART=4021 ./build/px4_sitl_default/bin/px4
-Verify the Model:
+```
 
-Check that the X500 drone with the depth camera and 2D LiDAR appears in Gazebo.
-
-Use rviz2 or ros2 topic echo to verify sensor data:
-
-bash
-Copy
+#### Verify the Model:
+```bash
 ros2 topic list
 ros2 topic echo /x500_lidar_depth/scan  # LiDAR data
 ros2 topic echo /x500_lidar_depth/depth_image  # Depth camera data
-5. Verify in QGroundControl
-Open QGroundControl:
+```
 
-Launch QGroundControl and connect to the simulation (usually via UDP on localhost:14550).
+### 5. Verify in QGroundControl
 
-Select the Airframe:
+#### Open QGroundControl:
+- Launch QGroundControl and connect to the simulation (usually via UDP on `localhost:14550`).
 
-Go to Setup > Airframe.
+#### Select the Airframe:
+- Go to **Setup > Airframe**.
+- Search for your airframe (e.g., "Gazebo x500 with Depth Camera and 2D LiDAR").
+- Select the airframe and click **Apply and Restart**.
 
-Search for your airframe (e.g., "Gazebo x500 with Depth Camera and 2D LiDAR").
+#### Verify Parameters:
+- Go to **Setup > Parameters** to view and modify parameters specific to your airframe.
 
-Select the airframe and click Apply and Restart.
-
-Verify Parameters:
-
-Go to Setup > Parameters to view and modify parameters specific to your airframe.
-
-Directory Structure
-Copy
+## Directory Structure
+```
 PX4-Autopilot/
 ├── ROMFS/
 │   ├── px4fmu_common/
@@ -203,3 +182,7 @@ PX4-Autopilot/
 │   │   │   │   ├── x500_lidar_depth/
 │   │   │   │   │   ├── model.sdf  # Model SDF file
 │   │   │   │   │   ├── model.config  # Model config file
+```
+
+## Conclusion
+Following this guide, you have successfully added a new model (`x500_lidar_depth`) to PX4, equipped with a depth camera and 2D LiDAR for Gazebo Harmonic simulation. You can now test and refine your drone's sensor setup within PX4 and ROS 2.
