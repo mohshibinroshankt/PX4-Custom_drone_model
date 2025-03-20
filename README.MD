@@ -95,7 +95,7 @@ cd ~/PX4-Autopilot/ROMFS/px4fmu_common/init.d-posix/airframes
 
 #### Create a New Airframe File:
 ```bash
-cp 4010_x500 4021_gz_x500_lidar_depth
+cp 4001_gz_x500 4021_gz_x500_lidar_depth
 ```
 
 #### Edit the Airframe File:
@@ -125,11 +125,9 @@ nano CMakeLists.txt
 
 #### Add the following line to include the new airframe:
 ```cmake
-px4_add_airframe_file(
-  PATH "4021_gz_x500_lidar_depth"
-  CLASS "simulation"
-  TYPE "quadrotor"
-  MAINTAINER "Your Name <your.email@example.com>"
+px4_add_romfs_file(
+  4021_gz_x500_lidar_depth
+  
 )
 ```
 
@@ -139,12 +137,6 @@ cd ~/PX4-Autopilot
 make px4_sitl gz_x500_lidar_depth
 ```
 
-### 4. Test the New Airframe
-
-#### Start the Simulation:
-```bash
-PX4_SYS_AUTOSTART=4021 ./build/px4_sitl_default/bin/px4
-```
 
 #### Verify the Model:
 ```bash
