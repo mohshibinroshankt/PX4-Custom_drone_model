@@ -113,7 +113,6 @@ nano 4021_gz_x500_lidar_depth
 #
 PX4_SIM_MODEL=${PX4_SIM_MODEL:=x500_lidar_depth}
 
-. ${R}etc/init.d-posix/airframes/4001_gz_x500
 ```
 
 ### 3. Add the Airframe to CMake
