@@ -3,6 +3,7 @@
 This guide provides step-by-step instructions to add a new model (`x500_lidar_depth`) to PX4 for use with Gazebo Harmonic (Gz). The model includes an X500 drone equipped with a depth camera and a 2D LiDAR.
 
 ## Prerequisites
+- Ubuntu 22.04
 - PX4-Autopilot installed and set up.
 - Gazebo Harmonic (Gz) installed and configured.
 - Basic knowledge of ROS 2 and PX4.
